@@ -1,4 +1,5 @@
-# Ethos
+# Ethos <img width="104" height="104" alt="image" src="https://github.com/user-attachments/assets/58149842-1261-4e74-aeb2-d009ce043061" />
+
 
 A minimal motivational quotes app for iOS and Android. One quote at a time, calm typography, and just enough customization — no accounts, ads, or social feeds.
 
