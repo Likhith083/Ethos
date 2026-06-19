@@ -1,32 +1,50 @@
-import { useFonts } from 'expo-font';
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import {
+  CrimsonText_400Regular,
+} from '@expo-google-fonts/crimson-text';
+import {
+  Inter_400Regular,
+  Inter_500Medium,
+} from '@expo-google-fonts/inter';
+import {
+  Lora_400Regular,
+} from '@expo-google-fonts/lora';
+import {
+  PlayfairDisplay_600SemiBold,
+  useFonts,
+} from '@expo-google-fonts/playfair-display';
+import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { StyleSheet } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/components/useColorScheme';
+import { AppSettingsProvider } from '@/components/AppSettingsProvider';
+import {
+  configureNotifications,
+  syncDailyQuoteNotification,
+} from '@/lib/notifications/scheduler';
+import { colors } from '@/theme/colors';
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router';
+export { ErrorBoundary } from 'expo-router';
 
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
-};
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+/** Root layout: fonts, settings provider, notification bootstrap. */
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    PlayfairDisplay_600SemiBold,
+    Inter_400Regular,
+    Inter_500Medium,
+    Lora_400Regular,
+    CrimsonText_400Regular,
   });
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
-    if (error) throw error;
+    if (error) {
+      throw error;
+    }
   }, [error]);
 
   useEffect(() => {
@@ -35,22 +53,37 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
+  useEffect(() => {
+    if (!loaded) {
+      return;
+    }
+
+    void (async () => {
+      await configureNotifications();
+      await syncDailyQuoteNotification();
+    })();
+  }, [loaded]);
+
   if (!loaded) {
     return null;
   }
 
-  return <RootLayoutNav />;
-}
-
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <AppSettingsProvider>
+        <GestureHandlerRootView style={styles.root}>
+          <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.environment } }}>
+            <Stack.Screen name="index" />
+          </Stack>
+        </GestureHandlerRootView>
+      </AppSettingsProvider>
+    </SafeAreaProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: colors.environment,
+  },
+});
