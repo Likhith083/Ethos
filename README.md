@@ -126,24 +126,6 @@ Local daily notifications via `expo-notifications`. Multiple reminder times are 
 | `npm run web` | Start web target |
 | `npm run export:web` | Build static web export to `dist/` |
 
-## Web demo (GitHub Pages)
-
-The app is published at **[https://likhith083.github.io/JustDoIT/](https://likhith083.github.io/JustDoIT/)**.
-
-Pushes to `master` automatically rebuild and deploy the static site to the `gh-pages` branch via GitHub Actions. To enable hosting:
-
-1. Open **Settings → Pages** in the GitHub repository.
-2. Set **Source** to **Deploy from a branch**.
-3. Choose branch **`gh-pages`**, folder **`/` (root)**.
-4. Save.
-
-To deploy manually:
-
-```powershell
-npm run export:web
-```
-
-Then push the contents of `dist/` to the `gh-pages` branch.
 
 ## Attribution
 
