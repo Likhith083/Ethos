@@ -2,9 +2,6 @@
 
 A minimal motivational quotes app for iOS and Android. One quote at a time, calm typography, and just enough customization — no accounts, ads, or social feeds.
 
-**[Try the web demo →](https://likhith083.github.io/JustDoIT/)**
-
-The live demo runs in your browser via GitHub Pages. Swipe or drag for quotes, tap for options. Native reminders are available in the mobile app only.
 
 ## Features
 
